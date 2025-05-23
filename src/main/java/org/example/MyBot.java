@@ -1,6 +1,7 @@
 package org.example;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,6 +28,9 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String message = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
+
+
+
 
             if (message.equals("Add profile")) {
                 switch ((portfolioAdd.getOrDefault(chatId, "start"))) {
@@ -70,7 +74,6 @@ public class MyBot extends TelegramLongPollingBot {
                 sendMessage.setText("Name : " + name + "\nFamiliya" + familiya);
 
 
-
                 try {
                     execute(sendMessage);
                 } catch (TelegramApiException e) {
@@ -99,6 +102,28 @@ public class MyBot extends TelegramLongPollingBot {
             CallbackQuery callbackQuery = update.getCallbackQuery();
             Long chatId = callbackQuery.getMessage().getChatId();
             String data = callbackQuery.getData();
+            String userName = update.getMessage().getChat().getUserName();
+
+            System.out.println(data);
+            System.out.println(userName);
+
+
+            if(data.equals("call")){
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setChatId(chatId);
+                sendMessage.setText("""
+                        <a href = '@umidovna_ru'> Aloqaga chiqish </a>
+                        """);
+                sendMessage.setParseMode(ParseMode.HTML);
+
+                try {
+                    execute(sendMessage);
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+
             if (data.equals("date_1")) {
                 try {
                     execute(myBotService.Time(chatId));
